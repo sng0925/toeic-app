@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>범규의 영어교실 (Adaptive TOEIC Master v7.7)</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;800&display=swap');
+
+        body { font-family: 'Pretendard', sans-serif; }
+
+        .animated-bg {
+
+            background: linear-gradient(-45deg, #090d16, #111827, #1e1b4b, #2e1065, #090d16);
+
+            background-size: 400% 400%;
+
+            animation: gradient 18s ease infinite;
+
+        }
+
+        @keyframes gradient {
+
+            0% { background-position: 0% 50%; }
+
+            50% { background-position: 100% 50%; }
+
+            100% { background-position: 0% 50%; }
+
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
+
+        ::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.4); border-radius: 999px; }
+
+        .trans-word {
+
+            cursor: help;
+
+            border-bottom: 1px dashed rgba(129, 140, 248, 0.6);
+
+            transition: all 0.2s;
+
+        }
+
+        .trans-word:hover {
+
+            color: #818cf8;
+
+            background-color: rgba(129, 140, 248, 0.1);
+
+        }
+
+    </style>
+
+</head>
+
+<body class="animated-bg min-h-screen flex flex-col justify-between text-slate-100">
+
+
+
+    <div id="login-screen" class="flex-grow flex items-center justify-center p-4">
+
+        <div class="bg-slate-900/80 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-indigo-500/20 max-w-md w-full text-center space-y-6">
+
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 text-white text-4xl mb-2 shadow-lg shadow-indigo-500/30">
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+            </div>
+
+            <h1 class="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">범규의 영어교실 <span class="text-xs text-indigo-300 font-bold px-2 py-0.5 rounded-full bg-indigo-950/80 border border-indigo-800">v7.7</span></h1>
+
+            <p class="text-slate-400 text-sm">유형별 타겟 훈련 & 실시간 방사형 분석 그래프 복구 완료</p>
+
+            
+
+            <div class="space-y-4 text-left">
+
+                <label class="block text-xs font-bold text-indigo-400 uppercase tracking-wider">사용자 이름 (계정)</label>
+
+                <input type="text" id="username-input" placeholder="이름을 입력하세요 (정보 자동 기억)" class="w-full p-4 bg-slate-950/60 border border-slate-800 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-white font-medium transition-all placeholder-slate-600">
+
+            </div>
+
+
+
+            <button onclick="handleLogin()" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white py-4 rounded-2xl font-bold transition-all shadow-lg shadow-indigo-600/20 active:scale-[0.98]">
+
+                영어교실 입장하기 <i class="fa-solid fa-fire-flame-curved ml-2"></i>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <div id="diagnostic-screen" class="hidden flex-grow flex items-center justify-center p-4">
+
+        <div class="bg-slate-900/80 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-indigo-500/20 max-w-md w-full text-center space-y-6">
+
+            <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">최초 1회 레벨 설정</span>
+
+            <h2 class="text-2xl font-bold text-white">학습 목표 설정</h2>
+
+            <div class="space-y-3">
+
+                <button onclick="setInitialLevel('EASY')" class="w-full p-4 bg-slate-950/60 border border-slate-850 rounded-2xl text-left hover:border-indigo-500 hover:bg-indigo-950/30 transition-all flex justify-between items-center group">
+
+                    <div><span class="block font-bold text-slate-200">초급 입문 (Target: ~500점)</span></div>
+
+                    <i class="fa-solid fa-chevron-right text-slate-600 group-hover:text-indigo-400"></i>
+
+                </button>
+
+                <button onclick="setInitialLevel('NORMAL')" class="w-full p-4 bg-slate-950/60 border border-slate-850 rounded-2xl text-left hover:border-indigo-500 hover:bg-indigo-950/30 transition-all flex justify-between items-center group">
+
+                    <div><span class="block font-bold text-slate-200">중급 실력 (Target: 500~800점)</span></div>
+
+                    <i class="fa-solid fa-chevron-right text-slate-600 group-hover:text-indigo-400"></i>
+
+                </button>
+
+                <button onclick="setInitialLevel('HARD')" class="w-full p-4 bg-slate-950/60 border border-slate-850 rounded-2xl text-left hover:border-indigo-500 hover:bg-indigo-950/30 transition-all flex justify-between items-center group">
+
+                    <div><span class="block font-bold text-slate-200">고급 완벽 (Target: 800점~)</span></div>
+
+                    <i class="fa-solid fa-chevron-right text-slate-600 group-hover:text-indigo-400"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div id="main-app" class="hidden flex-grow flex flex-col justify-between">
+
+        <header class="bg-slate-900/70 backdrop-blur-xl border-b border-slate-800 text-white p-4 shadow-md sticky top-0 z-50">
+
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+
+                <div class="flex items-center space-x-2">
+
+                    <span class="font-extrabold text-2xl bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">범규의 영어교실</span>
+
+                    <span class="text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2.5 py-0.5 rounded-full font-bold" id="level-badge">NORMAL</span>
+
+                </div>
+
+                <div class="flex items-center space-x-4 text-sm">
+
+                    <span id="user-welcome" class="font-bold text-slate-300"></span>
+
+                    <button onclick="logout()" class="text-slate-400 hover:text-white transition-colors p-2 rounded-xl bg-slate-800/40 hover:bg-slate-800"><i class="fa-solid fa-right-from-bracket"></i> 로그아웃</button>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <div class="max-w-7xl mx-auto w-full p-4 pb-0">
+
+            <div class="grid grid-cols-4 bg-slate-900/80 backdrop-blur-md border border-slate-800 rounded-2xl p-1.5 gap-1.5 text-center shadow-lg">
+
+                <button id="tab-learn" onclick="switchTab('learn')" class="py-3 text-sm font-bold rounded-xl transition-all text-slate-400 hover:text-white">AI 추천 코스</button>
+
+                <button id="tab-mock" onclick="switchTab('mock')" class="py-3 text-sm font-bold rounded-xl transition-all text-slate-400 hover:text-white">미니 실전모의</button>
+
+                <button id="tab-focus" onclick="switchTab('focus')" class="py-3 text-sm font-bold rounded-xl transition-all text-slate-400 hover:text-white">파트 선택 훈련</button>
+
+                <button id="tab-analyze" onclick="switchTab('analyze')" class="py-3 text-sm font-bold rounded-xl transition-all text-slate-400 hover:text-white">학습 성적 분석</button>
+
+            </div>
+
+        </div>
+
+
+
+        <div id="learn-section" class="w-full max-w-7xl mx-auto p-4 space-y-4">
+
+            <div class="bg-gradient-to-br from-indigo-900/60 to-purple-950/60 backdrop-blur-lg rounded-3xl p-6 text-white shadow-xl flex justify-between items-center border border-indigo-500/20">
+
+                <div class="space-y-1">
+
+                    <span class="text-indigo-300 text-xs font-bold uppercase tracking-wider">AI 맞춤 추천 모드</span>
+
+                    <h3 class="text-2xl font-bold" id="dashboard-status">학습 진행 중 🔍</h3>
+
+                    <p class="text-sm text-indigo-200" id="stats-summary">성공적으로 로그인되었습니다.</p>
+
+                </div>
+
+                <div class="text-right">
+
+                    <span class="text-slate-400 text-xs font-bold block mb-1">내 목표 및 현재 점수</span>
+
+                    <span class="text-4xl font-extrabold text-amber-400 tracking-tight" id="estimated-score">620점</span>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="bg-slate-900/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl border border-slate-800 space-y-6">
+
+                <div class="flex justify-between items-center border-b border-slate-800/60 pb-4">
+
+                    <div class="flex flex-wrap gap-1.5 items-center">
+
+                        <span class="text-sm font-bold px-3 py-1.5 rounded-full bg-slate-950/60 text-indigo-400 border border-indigo-800" id="part-tag">카테고리</span>
+
+                        <span class="text-sm font-bold px-3 py-1.5 rounded-full bg-slate-950/60 text-purple-400 border border-purple-800" id="toeic-part-tag">Part 5</span>
+
+                    </div>
+
+                    <span class="text-xs text-slate-500 font-semibold" id="session-count">1번째 문제</span>
+
+                </div>
+
+
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+                    <div id="left-passage-container" class="lg:col-span-7 space-y-4 hidden">
+
+                        <div class="flex justify-between items-center">
+
+                            <span class="text-xs text-slate-400 font-bold"><i class="fa-solid fa-circle-info mr-1 text-indigo-400"></i>단어 <span class="text-indigo-300 underline">우클릭</span>시 번역 팝업</span>
+
+                            <button id="translate-toggle-btn" onclick="togglePassageTranslation()" class="text-xs bg-indigo-600 hover:bg-indigo-500 border border-indigo-500 px-3 py-1.5 rounded-xl font-bold text-white transition-all flex items-center gap-1.5 shadow-md">
+
+                                <i class="fa-solid fa-eye"></i> <span>전체 해석 보기</span>
+
+                            </button>
+
+                        </div>
+
+                        <div class="relative">
+
+                            <div id="passage-box" class="p-6 bg-slate-950/75 border border-slate-800 rounded-2xl text-slate-200 text-lg leading-relaxed font-medium min-h-[260px] max-h-[380px] overflow-y-auto shadow-inner"></div>
+
+                            <div id="translation-box" class="absolute inset-0 p-6 bg-indigo-950/95 border border-indigo-500/40 rounded-2xl text-indigo-200 text-base leading-relaxed hidden overflow-y-auto whitespace-pre-line font-medium z-10"></div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div id="right-question-container" class="lg:col-span-12 space-y-6">
+
+                        <div class="space-y-2">
+
+                            <span class="text-xs text-indigo-400 font-bold uppercase tracking-wider block" id="right-word-tip-part5"><i class="fa-solid fa-circle-info mr-1"></i>모르는 단어는 <span class="text-indigo-300 underline">우클릭</span>하세요.</span>
+
+                            <p class="text-slate-100 text-xl font-bold leading-relaxed" id="problem-question">문제가 로딩 중입니다...</p>
+
+                        </div>
+
+                        <div class="space-y-3" id="problem-options"></div>
+
+
+
+                        <div id="problem-feedback" class="p-5 rounded-2xl hidden border border-slate-800/80 bg-slate-950/40">
+
+                            <p class="font-extrabold text-lg mb-1" id="feedback-title"></p>
+
+                            <p class="text-sm text-slate-400 mb-4" id="feedback-desc"></p>
+
+                            <button onclick="handleNextProblemFlow()" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white py-4 rounded-xl font-bold transition-all shadow-lg text-base" id="next-btn-text">
+
+                                다음 문제 풀기 <i class="fa-solid fa-arrow-right ml-1"></i>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div id="mock-section" class="hidden w-full max-w-7xl mx-auto p-4 space-y-4">
+
+            <div class="bg-slate-900/80 backdrop-blur-xl rounded-3xl p-12 border border-slate-800 text-center space-y-6 max-w-2xl mx-auto">
+
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-500/10 text-amber-400 text-3xl border border-amber-500/20 mb-2">
+
+                    <i class="fa-solid fa-stopwatch"></i>
+
+                </div>
+
+                <h3 class="text-3xl font-extrabold text-white">미니 실전 모의고사</h3>
+
+                <p class="text-slate-400 text-sm">실전과 동일한 환경에서 정해진 문항을 연달아 풀어보고 성적을 기록하세요.</p>
+
+                <button onclick="alert('모의고사 컨텐츠가 곧 업로드됩니다!')" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 py-4 rounded-2xl font-extrabold hover:brightness-110 transition-all shadow-lg">모의고사 시작하기 (5문항)</button>
+
+            </div>
+
+        </div>
+
+
+
+        <div id="focus-section" class="hidden w-full max-w-7xl mx-auto p-4 space-y-4">
+
+            <div class="bg-slate-900/80 backdrop-blur-xl rounded-3xl p-8 border border-slate-800 space-y-8">
+
+                <div>
+
+                    <h3 class="text-2xl font-extrabold text-white">약점 파트 집중 타겟 트레이닝</h3>
+
+                    <p class="text-slate-400 text-sm mt-1">내가 약한 파트 및 세부 문법 유형을 필터링하여 맞춤형으로 돌입합니다.</p>
+
+                </div>
+
+
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <div class="space-y-3">
+
+                        <label class="block text-xs font-bold text-indigo-400 uppercase tracking-wider">1단계: 대분류 파트 선택</label>
+
+                        <div class="grid grid-cols-2 gap-3">
+
+                            <button id="focus-btn-part5" onclick="setFocusPart(5)" class="py-4 px-4 rounded-xl font-bold border transition-all text-center">Part 5 (단문 빈칸)</button>
+
+                            <button id="focus-btn-part6" onclick="setFocusPart(6)" class="py-4 px-4 rounded-xl font-bold border transition-all text-center">Part 6 (장문 공란)</button>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="space-y-3" id="sub-category-wrapper">
+
+                        <label class="block text-xs font-bold text-indigo-400 uppercase tracking-wider">2단계: Part 5 문법 세부 유형 선택</label>
+
+                        <select id="focus-sub-category" class="w-full p-4 bg-slate-950/60 border border-slate-850 rounded-xl text-white font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+                            <option value="ALL">전체 무작위 풀기</option>
+
+                            <option value="NOUN">명사구 (Noun Clauses)</option>
+
+                            <option value="GERUND">동명사 (Gerunds)</option>
+
+                            <option value="PARTICIPLE">분사형용사 (Participles)</option>
+
+                            <option value="PASSIVE">태/수동태 (Passive Voice)</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+
+                <button onclick="startFocusTraining()" class="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl font-extrabold text-white shadow-lg shadow-indigo-600/30 hover:brightness-110 active:scale-[0.99] transition-all">
+
+                    맞춤형 집중 타겟 훈련 시작 <i class="fa-solid fa-crosshairs ml-1"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <div id="analyze-section" class="hidden w-full max-w-7xl mx-auto p-4 space-y-6">
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+                
+
+                <div class="lg:col-span-5 space-y-6">
+
+                    <div class="bg-slate-900/80 backdrop-blur-xl rounded-3xl p-8 border border-slate-800 space-y-6">
+
+                        <div class="flex items-center space-x-3">
+
+                            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 text-2xl border border-purple-500/20">
+
+                                <i class="fa-solid fa-address-card"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h3 class="text-xl font-bold text-white" id="analyze-user-name">학습자님</h3>
+
+                                <p class="text-xs text-indigo-400 font-bold">성적 상세 분석 및 오답 추이</p>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="space-y-4 bg-slate-950/50 p-5 rounded-2xl border border-slate-900">
+
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">👥 동일 등급 그룹 내 내 위치</h4>
+
+                            <div class="space-y-3">
+
+                                <div>
+
+                                    <div class="flex justify-between text-xs font-bold mb-1"><span class="text-slate-400">그룹 내 상위 평균 (~850점)</span><span class="text-indigo-400">완성 단계</span></div>
+
+                                    <div class="w-full bg-slate-900 h-2 rounded-full"><div class="bg-indigo-500 h-2 rounded-full" style="width: 85%;"></div></div>
+
+                                </div>
+
+                                <div>
+
+                                    <div class="flex justify-between text-xs font-bold mb-1"><span class="text-slate-200">나의 현재 예측 점수</span><span class="text-amber-400 font-extrabold" id="analyze-current-score">620점</span></div>
+
+                                    <div class="w-full bg-slate-900 h-3 rounded-full overflow-hidden"><div id="analyze-score-bar" class="bg-gradient-to-r from-amber-500 to-orange-500 h-3" style="width: 62%;"></div></div>
+
+                                </div>
+
+                                <div>
+
+                                    <div class="flex justify-between text-xs font-bold mb-1"><span class="text-slate-400">동일 레벨 평균 (600점)</span><span class="text-slate-300">중간 수준</span></div>
+
+                                    <div class="w-full bg-slate-900 h-2 rounded-full"><div class="bg-slate-500 h-2 rounded-full" style="width: 60%;"></div></div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="lg:col-span-7">
+
+                    <div class="bg-slate-900/80 backdrop-blur-xl rounded-3xl p-8 border border-slate-800 space-y-6 flex flex-col items-center justify-center">
+
+                        <div class="w-full text-left">
+
+                            <h3 class="text-xl font-bold text-white"><i class="fa-solid fa-chart-pie mr-1 text-purple-400"></i> 영역별 실력 종합 진단표</h3>
+
+                            <p class="text-slate-400 text-xs mt-1">내가 정답을 맞출 때마다 파트별 세부 능력치가 실시간으로 업데이트되어 반영됩니다.</p>
+
+                        </div>
+
+                        <div class="relative w-full max-w-[340px] aspect-square flex items-center justify-center">
+
+                            <canvas id="radarChart" width="340" height="340"></canvas>
+
+                        </div>
+
+                        <div class="flex flex-wrap justify-center gap-4 text-xs font-bold mt-2">
+
+                            <span class="flex items-center gap-1.5 text-emerald-400"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> 명사/동명사</span>
+
+                            <span class="flex items-center gap-1.5 text-indigo-400"><span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span> 분사구문</span>
+
+                            <span class="flex items-center gap-1.5 text-purple-400"><span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span> 태/수동태</span>
+
+                            <span class="flex items-center gap-1.5 text-amber-400"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Part 6 독해</span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div id="word-dict-modal" class="hidden fixed z-[9999] bg-slate-950/95 border border-indigo-500/40 text-slate-100 p-4 rounded-2xl shadow-2xl max-w-xs space-y-1.5 backdrop-blur-md">
+
+        <div class="flex justify-between items-center border-b border-indigo-500/20 pb-1.5">
+
+            <span id="dict-word" class="font-bold text-indigo-400 text-base">Word</span>
+
+            <button onclick="closeDictModal()" class="text-slate-400 hover:text-white text-xs p-1"><i class="fa-solid fa-xmark"></i></button>
+
+        </div>
+
+        <p id="dict-meaning" class="text-sm font-semibold text-emerald-400">뜻 로딩...</p>
+
+    </div>
+
+
+
+    <footer class="bg-slate-950/80 border-t border-slate-900/60 py-5 text-center text-xs text-slate-500 mt-6">
+
+        <div class="max-w-7xl mx-auto">© 2026 범규의 영어교실. All rights reserved.</div>
+
+    </footer>
+
+
+
+    <script>
+        const dictionary = {
+            "newly": "최근에, 새로이", "appointed": "임명된", "manager": "부장, 매니저",
+            "expressed": "표현했다", "appreciation": "감사, 평가", "exceptional": "뛰어난",
+            "performance": "실적, 성과", "responsible": "책임이 있는", "quarterly": "분기별의",
+            "audits": "회계감사", "conducting": "수행하는 것", "conduct": "수행하다",
+            "version": "버전,판", "contract": "계약(서)", "legal": "법적인",
+            "review": "검토", "senior": "수석의, 선임의", "engineer": "기술자",
+            "repaired": "수리했다", "database": "데이터베이스", "experience": "경력, 경험",
+            "corporate": "기업의, 회사의", "expense": "지출, 비용", "reports": "보고서",
+            "submit": "제출하다", "submitted": "제출된", "maintenance": "유지보수, 관리",
+            "crew": "팀, 승무원", "energy-efficient": "에너지 효율적인", "upgrade": "업그레이드",
+            "global": "세계적인", "demands": "수요", "decide": "결정하다",
+            "expand": "확장하다", "currently": "현재", "absent": "자리에 없는",
+            "memorandum": "회람, 공지 메모", "heads": "부서장들, 책임자들", "department": "부서",
+            "facilities": "시설 관리부", "subject": "제목, 주제", "scheduled": "예정된",
+            "elevator": "엘리베이터", "inspection": "점검, 검사", "notify": "통보하다, 알리다",
+            "wing": "동(북관)", "undergoing": "겪다, 진행 중이다", "regular": "정기적인",
+            "safety": "안전", "window": "기간, 시간대", "kindly": "친절하게, 부디",
+            "service": "화물용/서비스용 엘리베이터", "final": "최종의", "schedules": "일정들",
+            "regarding": "~에 관한", "matter": "문제, 사안", "friday": "금요일", "afternoon": "오후"
+        };
+        const itemBank = {
+            NOUN: [{ part: 5, category: "NOUN", question: "The newly appointed manager expressed _______ for the team's exceptional performance during the product launch.", options: ["appreciate", "appreciated", "appreciation", "appreciatively"], answer: 2, explanation: "expressed의 목적어 자리이므로 명사 (C)가 정답입니다.", translation: "새로 임명된 부장은 제품 출시 기간 동안 팀의 뛰어난 성과에 대한 감사를 표했습니다." }],
+            GERUND: [{ part: 5, category: "GERUND", question: "Mr. Kim is responsible for _______ the quarterly financial audits and reporting directly to the headquarters.", options: ["conducting", "conduct", "conducted", "conduction"], answer: 0, explanation: "전치사 for의 목적어인 동명사 (A)가 정답입니다.", translation: "김 씨는 분기별 회계 감사를 수행하고 본사에 직접 보고할 책임이 있습니다." }],
+            PARTICIPLE: [{ part: 5, category: "PARTICIPLE", question: "The _______ version of the contract will be sent to all board members as soon as the legal review is complete.", options: ["revise", "revising", "revised", "revision"], answer: 2, explanation: "수정된 계약서라는 의미의 과거분사 (C)가 정답입니다.", translation: "법적 검토가 완료되는 대로 계약서의 수정본이 모든 이사회 구성원들에게 발송될 예정입니다." }],
+            PASSIVE: [{ part: 5, category: "PASSIVE", question: "Please keep in mind that all corporate expense reports must _______ to the finance team by the end of each month.", options: ["submit", "be submitted", "submitting", "have submitted"], answer: 1, explanation: "보고서는 제출되어야 하므로 수동태 (B)가 정답입니다.", translation: "모든 법인 경비 보고서는 매달 말까지 재무팀에 제출되어야 함을 명심해 주십시오." }],
+            PART6: [{ part: 6, category: "PART6", passage: "[Memorandum]\nTo: All Department Heads\nFrom: Facilities Management\nSubject: Scheduled Elevator Inspection\n\nThis is to notify you that the elevators in the North Wing will be undergoing regular safety inspections next Monday. During this maintenance window, we kindly ask that you use the service elevators. All final schedules and feedback regarding this matter must be submitted _______ Friday afternoon.", question: "Q. Choose the correct option to fill in the blank in the memorandum above.", options: ["by", "on", "at", "to"], answer: 0, explanation: "금요일 오후까지 완료의 기한이므로 전치사 (A)가 정답입니다.", translation: "[회람]\n수신: 모든 부서장\n발신: 시설 관리부\n제목: 예정된 엘리베이터 점검\n\n다음 주 월요일에 북관의 엘리베이터 정기 안전 점검이 진행될 예정임을 알려드립니다. 이 유지 보수 기간 동안 서비스 엘리베이터를 이용해 주시기 바랍니다. 이 사안에 관한 모든 최종 일정과 피드백은 금요일 오후까지 제출되어야 합니다." }]
+        };
+        // 기본 유저 정보 설정 (그래프용 세부 영역 역량 수치 추가)
+        let currentUser = { 
+            username: "", 
+            level: "NORMAL", 
+            score: 620,
+            stats: { NOUN: 70, GERUND: 60, PARTICIPLE: 50, PASSIVE: 65, PART6: 55 }
+        };
+        let currentProblem = null; 
+        let sessionIndex = 1;
+        // 파트 선택용 전역 타겟
+        let activeFocusPart = 5; 
+        function handleLogin() {
+            const name = document.getElementById('username-input').value.trim();
+            if (!name) return alert("이름을 입력하세요!");
+            const savedData = localStorage.getItem(`user_${name}`);
+            currentUser.username = name;
+            if (savedData) {
+                currentUser = JSON.parse(savedData);
+                // 혹시 하위 호환 문제로 stats가 비어있으면 초기화
+                if (!currentUser.stats) {
+                    currentUser.stats = { NOUN: 70, GERUND: 60, PARTICIPLE: 50, PASSIVE: 65, PART6: 55 };
+                }
+                showMainApp();
+            } else {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('diagnostic-screen').classList.remove('hidden');
+            }
+        }
+        function setInitialLevel(lvl) {
+            currentUser.level = lvl;
+            currentUser.score = lvl === 'HARD' ? 820 : (lvl === 'NORMAL' ? 620 : 450);
+            currentUser.stats = lvl === 'HARD' ? 
+                { NOUN: 85, GERUND: 80, PARTICIPLE: 75, PASSIVE: 80, PART6: 75 } : 
+                (lvl === 'NORMAL' ? { NOUN: 70, GERUND: 60, PARTICIPLE: 50, PASSIVE: 65, PART6: 55 } : { NOUN: 45, GERUND: 40, PARTICIPLE: 35, PASSIVE: 40, PART6: 30 });
+            
+            saveUserDataToStorage();
+            showMainApp();
+        }
+        function saveUserDataToStorage() {
+            if (currentUser.username) {
+                localStorage.setItem(`user_${currentUser.username}`, JSON.stringify(currentUser));
+            }
+        }
+        function showMainApp() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('diagnostic-screen').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+            document.getElementById('user-welcome').innerText = `${currentUser.username}님`;
+            document.getElementById('level-badge').innerText = currentUser.level;
+            document.getElementById('estimated-score').innerText = `${currentUser.score}점`;
+            // 타겟 파트 UI 기본 설정 및 동기화
+            setFocusPart(5);
+            switchTab('learn');
+            document.addEventListener('click', () => closeDictModal());
+        }
+        // [탭 제어] 탭별 화면 전환 통합 처리
+        function switchTab(tab) {
+            document.getElementById('learn-section').classList.add('hidden');
+            document.getElementById('mock-section').classList.add('hidden');
+            document.getElementById('focus-section').classList.add('hidden');
+            document.getElementById('analyze-section').classList.add('hidden');
+            const tabButtons = ['tab-learn', 'tab-mock', 'tab-focus', 'tab-analyze'];
+            tabButtons.forEach(btnId => {
+                const btn = document.getElementById(btnId);
+                btn.className = "py-3 text-sm font-bold rounded-xl transition-all text-slate-400 hover:text-white";
+            });
+            if (tab === 'learn') {
+                document.getElementById('learn-section').classList.remove('hidden');
+                document.getElementById('tab-learn').className = "py-3 text-sm font-bold rounded-xl transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/20";
+                loadNextProblem();
+            } else if (tab === 'mock') {
+                document.getElementById('mock-section').classList.remove('hidden');
+                document.getElementById('tab-mock').className = "py-3 text-sm font-bold rounded-xl transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/20";
+            } else if (tab === 'focus') {
+                document.getElementById('focus-section').classList.remove('hidden');
+                document.getElementById('tab-focus').className = "py-3 text-sm font-bold rounded-xl transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/20";
+            } else if (tab === 'analyze') {
+                document.getElementById('analyze-section').classList.remove('hidden');
+                document.getElementById('tab-analyze').className = "py-3 text-sm font-bold rounded-xl transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/20";
+                
+                // 데이터 연동
+                document.getElementById('analyze-user-name').innerText = `${currentUser.username}님`;
+                document.getElementById('analyze-current-score').innerText = `${currentUser.score}점`;
+                const percent = Math.min(100, Math.max(10, Math.floor((currentUser.score / 990) * 100)));
+                document.getElementById('analyze-score-bar').style.width = `${percent}%`;
+                // 방사형 그래프 그리기
+                drawRadarChart();
+            }
+        }
+        // [복구 기능 1] 파트 선택 및 Part 5 하위 영역 지정 훈련 제어
+        function setFocusPart(partNum) {
+            activeFocusPart = partNum;
+            const btn5 = document.getElementById('focus-btn-part5');
+            const btn6 = document.getElementById('focus-btn-part6');
+            const subWrapper = document.getElementById('sub-category-wrapper');
+            if (partNum === 5) {
+                btn5.className = "py-4 px-4 rounded-xl font-bold border-indigo-500 bg-indigo-950/40 text-indigo-300";
+                btn6.className = "py-4 px-4 rounded-xl font-bold border-slate-800 bg-slate-950/60 text-slate-400 hover:border-indigo-500 hover:text-white";
+                subWrapper.classList.remove('hidden'); // 세부 문법 선택 드롭다운 활성화
+            } else {
+                btn6.className = "py-4 px-4 rounded-xl font-bold border-indigo-500 bg-indigo-950/40 text-indigo-300";
+                btn5.className = "py-4 px-4 rounded-xl font-bold border-slate-800 bg-slate-950/60 text-slate-400 hover:border-indigo-500 hover:text-white";
+                subWrapper.classList.add('hidden'); // Part 6일때는 세부 옵션 숨김
+            }
+        }
+        function startFocusTraining() {
+            let focusItem = null;
+            if (activeFocusPart === 5) {
+                const subCat = document.getElementById('focus-sub-category').value;
+                if (subCat === 'ALL') {
+                    // Part 5 내부에서만 랜덤 추출
+                    const p5Keys = ["NOUN", "GERUND", "PARTICIPLE", "PASSIVE"];
+                    const chosen = p5Keys[Math.floor(Math.random() * p5Keys.length)];
+                    focusItem = itemBank[chosen][0];
+                } else {
+                    focusItem = itemBank[subCat][0];
+                }
+            } else if (activeFocusPart === 6) {
+                focusItem = itemBank.PART6[0];
+            }
+            if (focusItem) {
+                // 추천 코스 탭으로 시뮬레이션 전환 후 지정된 문제 삽입
+                document.getElementById('learn-section').classList.remove('hidden');
+                document.getElementById('focus-section').classList.add('hidden');
+                
+                // 탭 활성화 상태 변경
+                document.getElementById('tab-focus').className = "py-3 text-sm font-bold rounded-xl transition-all text-slate-400 hover:text-white";
+                document.getElementById('tab-learn').className = "py-3 text-sm font-bold rounded-xl transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/20";
+                renderProblem(focusItem);
+            }
+        }
+
+        // ====== 아래부터는 파일이 중간에 끊겨 있던 부분(누락된 핵심 함수)을 복구한 코드입니다 ======
+
+        // [문제 출제] AI 추천 코스: 취약한 영역일수록 더 자주 출제되도록 가중치 부여
+        function loadNextProblem() {
+            const keys = Object.keys(currentUser.stats);
+            // 능력치가 낮을수록(=취약할수록) 가중치를 높여서 뽑히기 쉽게 구성
+            let pool = [];
+            keys.forEach(key => {
+                const weight = Math.max(5, 100 - currentUser.stats[key]);
+                for (let i = 0; i < weight; i++) pool.push(key);
+            });
+            const chosenKey = pool[Math.floor(Math.random() * pool.length)];
+            const item = itemBank[chosenKey][0];
+            document.getElementById('session-count').innerText = `${sessionIndex}번째 문제`;
+            sessionIndex++;
+            renderProblem(item);
+        }
+
+        // 문제 데이터를 화면(질문/보기/지문)에 렌더링
+        function renderProblem(item) {
+            currentProblem = item;
+            currentProblem.answered = false;
+
+            document.getElementById('problem-feedback').classList.add('hidden');
+            document.getElementById('part-tag').innerText = item.part === 6 ? "PART 6" : "PART 5";
+            document.getElementById('toeic-part-tag').innerText = item.part === 6 ? "Part 6" : "Part 5";
+
+            const passageContainer = document.getElementById('left-passage-container');
+            const translationBox = document.getElementById('translation-box');
+            const translateBtn = document.getElementById('translate-toggle-btn');
+
+            translationBox.classList.add('hidden');
+            translateBtn.innerHTML = '<i class="fa-solid fa-eye"></i> <span>전체 해석 보기</span>';
+
+            if (item.part === 6 && item.passage) {
+                passageContainer.classList.remove('hidden');
+                document.getElementById('passage-box').innerHTML = wrapDictWords(item.passage);
+                translationBox.innerText = item.translation || '';
+            } else {
+                passageContainer.classList.add('hidden');
+            }
+
+            document.getElementById('problem-question').innerHTML = wrapDictWords(item.question);
+
+            const optionsBox = document.getElementById('problem-options');
+            optionsBox.innerHTML = '';
+            const labels = ['A', 'B', 'C', 'D'];
+            item.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.id = `option-btn-${idx}`;
+                btn.className = "w-full text-left p-4 bg-slate-950/60 border border-slate-800 rounded-xl font-semibold text-slate-200 hover:border-indigo-500 hover:bg-indigo-950/30 transition-all";
+                btn.innerHTML = `<span class="text-indigo-400 font-extrabold mr-2">(${labels[idx]})</span>${opt}`;
+                btn.onclick = () => selectAnswer(idx);
+                optionsBox.appendChild(btn);
+            });
+        }
+
+        // 지문/문제 속 단어를 우클릭하면 사전 팝업이 뜨도록 span 태그로 감싸기
+        function wrapDictWords(text) {
+            if (!text) return '';
+            const escaped = text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+            return escaped.split(/(\s+)/).map(token => {
+                if (/^\s+$/.test(token) || token === '') return token;
+                const clean = token.replace(/[.,;:()\[\]"'\n_]/g, '').toLowerCase();
+                if (clean && dictionary[clean]) {
+                    return `<span class="trans-word" oncontextmenu="showDict(event, '${clean}')">${token}</span>`;
+                }
+                return token;
+            }).join('');
+        }
+
+        // 단어 우클릭 시 사전 팝업 표시
+        function showDict(event, word) {
+            event.preventDefault();
+            event.stopPropagation();
+            const modal = document.getElementById('word-dict-modal');
+            document.getElementById('dict-word').innerText = word;
+            document.getElementById('dict-meaning').innerText = dictionary[word] || '뜻 정보 없음';
+
+            const x = Math.min(event.pageX + 10, window.innerWidth - 260);
+            const y = Math.min(event.pageY + 10, window.innerHeight - 100);
+            modal.style.left = `${x}px`;
+            modal.style.top = `${y}px`;
+            modal.classList.remove('hidden');
+        }
+
+        function closeDictModal() {
+            document.getElementById('word-dict-modal').classList.add('hidden');
+        }
+
+        // 지문 전체 해석 토글 (Part 6)
+        function togglePassageTranslation() {
+            const translationBox = document.getElementById('translation-box');
+            const translateBtn = document.getElementById('translate-toggle-btn');
+            const isHidden = translationBox.classList.contains('hidden');
+            if (isHidden) {
+                translationBox.classList.remove('hidden');
+                translateBtn.innerHTML = '<i class="fa-solid fa-eye-slash"></i> <span>해석 숨기기</span>';
+            } else {
+                translationBox.classList.add('hidden');
+                translateBtn.innerHTML = '<i class="fa-solid fa-eye"></i> <span>전체 해석 보기</span>';
+            }
+        }
+
+        // 보기 선택 -> 정오답 처리, 능력치/점수 갱신, 해설 표시
+        function selectAnswer(idx) {
+            if (!currentProblem || currentProblem.answered) return;
+            currentProblem.answered = true;
+
+            const isCorrect = idx === currentProblem.answer;
+            const category = currentProblem.category;
+
+            for (let i = 0; i < currentProblem.options.length; i++) {
+                const btn = document.getElementById(`option-btn-${i}`);
+                btn.onclick = null;
+                if (i === currentProblem.answer) {
+                    btn.className = "w-full text-left p-4 bg-emerald-950/40 border border-emerald-500 rounded-xl font-semibold text-emerald-300";
+                } else if (i === idx) {
+                    btn.className = "w-full text-left p-4 bg-rose-950/40 border border-rose-500 rounded-xl font-semibold text-rose-300";
+                } else {
+                    btn.className = "w-full text-left p-4 bg-slate-950/60 border border-slate-800 rounded-xl font-semibold text-slate-500 opacity-60";
+                }
+            }
+
+            if (currentUser.stats[category] !== undefined) {
+                currentUser.stats[category] = Math.max(0, Math.min(100,
+                    currentUser.stats[category] + (isCorrect ? 3 : -2)));
+            }
+
+            const statValues = Object.values(currentUser.stats);
+            const avg = statValues.reduce((a, b) => a + b, 0) / statValues.length;
+            currentUser.score = Math.round(300 + (avg / 100) * 690);
+            document.getElementById('estimated-score').innerText = `${currentUser.score}점`;
+
+            saveUserDataToStorage();
+
+            const feedback = document.getElementById('problem-feedback');
+            feedback.classList.remove('hidden');
+            document.getElementById('feedback-title').innerText = isCorrect ? '🎉 정답입니다!' : '❌ 오답입니다.';
+            document.getElementById('feedback-title').className = isCorrect
+                ? "font-extrabold text-lg mb-1 text-emerald-400"
+                : "font-extrabold text-lg mb-1 text-rose-400";
+            document.getElementById('feedback-desc').innerText = currentProblem.explanation || '';
+        }
+
+        function handleNextProblemFlow() {
+            document.getElementById('problem-feedback').classList.add('hidden');
+            loadNextProblem();
+        }
+
+        // 방사형(레이더) 그래프 그리기
+        function drawRadarChart() {
+            const canvas = document.getElementById('radarChart');
+            if (!canvas || !canvas.getContext) return;
+            const ctx = canvas.getContext('2d');
+            const size = canvas.width;
+            const center = size / 2;
+            const radius = size / 2 - 40;
+
+            ctx.clearRect(0, 0, size, size);
+
+            const labels = ['NOUN', 'GERUND', 'PARTICIPLE', 'PASSIVE', 'PART6'];
+            const values = labels.map(l => currentUser.stats[l] !== undefined ? currentUser.stats[l] : 0);
+            const count = labels.length;
+
+            // 배경 그리드 (5단계)
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.25)';
+            ctx.lineWidth = 1;
+            for (let step = 1; step <= 5; step++) {
+                const r = (radius * step) / 5;
+                ctx.beginPath();
+                for (let i = 0; i <= count; i++) {
+                    const angle = (Math.PI * 2 * i) / count - Math.PI / 2;
+                    const x = center + r * Math.cos(angle);
+                    const y = center + r * Math.sin(angle);
+                    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            }
+
+            // 축 선 + 라벨
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '12px Pretendard, sans-serif';
+            ctx.textAlign = 'center';
+            for (let i = 0; i < count; i++) {
+                const angle = (Math.PI * 2 * i) / count - Math.PI / 2;
+                const x = center + radius * Math.cos(angle);
+                const y = center + radius * Math.sin(angle);
+                ctx.beginPath();
+                ctx.moveTo(center, center);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                const lx = center + (radius + 22) * Math.cos(angle);
+                const ly = center + (radius + 22) * Math.sin(angle);
+                ctx.fillText(labels[i], lx, ly);
+            }
+
+            // 데이터 폴리곤
+            ctx.beginPath();
+            for (let i = 0; i <= count; i++) {
+                const idx = i % count;
+                const angle = (Math.PI * 2 * idx) / count - Math.PI / 2;
+                const r = (radius * values[idx]) / 100;
+                const x = center + r * Math.cos(angle);
+                const y = center + r * Math.sin(angle);
+                if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(129, 140, 248, 0.35)';
+            ctx.fill();
+            ctx.strokeStyle = '#818cf8';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // 데이터 포인트
+            ctx.fillStyle = '#818cf8';
+            for (let i = 0; i < count; i++) {
+                const angle = (Math.PI * 2 * i) / count - Math.PI / 2;
+                const r = (radius * values[i]) / 100;
+                const x = center + r * Math.cos(angle);
+                const y = center + r * Math.sin(angle);
+                ctx.beginPath();
+                ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function logout() {
+            currentUser = {
+                username: "",
+                level: "NORMAL",
+                score: 620,
+                stats: { NOUN: 70, GERUND: 60, PARTICIPLE: 50, PASSIVE: 65, PART6: 55 }
+            };
+            sessionIndex = 1;
+            document.getElementById('username-input').value = '';
+            document.getElementById('main-app').classList.add('hidden');
+            document.getElementById('diagnostic-screen').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
